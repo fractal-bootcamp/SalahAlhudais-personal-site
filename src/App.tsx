@@ -4,6 +4,8 @@ import github from "./assets/github.png"
 import linkedln from "./assets/linkedin.png"
 import twitter from "./assets/twitter.png"
 import onboardingai from "./assets/onboardingai.png"
+import astroid from "./assets/astroid.png"
+import route_planning from "./assets/route_planning.png"
 import './App.css'
 /*
 General Structure:
@@ -59,27 +61,19 @@ const projects: Project[] = [
   },
   {
     id: 2,
-    title: "OnboardingAI",
-    description: "AI-caller that converses with users and schedules through phone as well as initiating calling campaigns for business needs",
-    image: "project1.jpg",
-    skills: ["React", "Node.js", "MongoDB"],
-    repoLink: "https://github.com/AnikSingha/OnboardingAI/tree/main"
+    title: "Astroid",
+    description: "Astroid Game built w/ Pygame",
+    image: astroid,
+    skills: ["Python","PyGame"],
+    repoLink: "https://github.com/Salhudais/asteroids"
   },
   {
     id: 3,
-    title: "OnboardingAI",
-    description: "AI-caller that converses with users and schedules through phone as well as initiating calling campaigns for business needs",
-    image: "project1.jpg",
+    title: "Route Planning",
+    description: "A Route Planning Visualizer built with C++ and IO2D using A*",
+    image: route_planning,
     skills: ["React", "Node.js", "MongoDB"],
-    repoLink: "https://github.com/AnikSingha/OnboardingAI/tree/main"
-  },
-  {
-    id: 4,
-    title: "OnboardingAI",
-    description: "AI-caller that converses with users and schedules through phone as well as initiating calling campaigns for business needs",
-    image: "project1.jpg",
-    skills: ["React", "Node.js", "MongoDB"],
-    repoLink: "https://github.com/AnikSingha/OnboardingAI/tree/main"
+    repoLink: "https://github.com/OnePercentBetter/Route-Planning"
   },
 ]
 
