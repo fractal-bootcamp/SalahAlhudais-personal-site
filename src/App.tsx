@@ -6,7 +6,6 @@ import twitter from "./assets/twitter.png"
 import onboardingai from "./assets/onboardingai.png"
 import astroid from "./assets/astroid.png"
 import route_planning from "./assets/route_planning.png"
-import UseSpreadsheet from 'use-spreadsheet'
 import './App.css'
 
 /*
@@ -45,8 +44,6 @@ Technologies:
 
 // https://docs.google.com/spreadsheets/d/e/2PACX-1vRwHUrNsa96jYumGIoK-eb1PTyZYqCWhF8ygzeWph4NTDk2TqLtHLlquPPe762k4i2fM2o0kMBxUeWE/pubhtml?gid=0&single=true
 
-
-const sheet = '2PACX-1vRwHUrNsa96jYumGIoK-eb1PTyZYqCWhF8ygzeWph4NTDk2TqLtHLlquPPe762k4i2fM2o0kMBxUeWE';
 
 interface Project {
   id: number;
@@ -184,9 +181,6 @@ function App() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [expandedPosts, setExpandedPosts] = useState<Set<number>>(new Set());
   
-  // const users = UseSpreadsheet(sheet);
-  // const loading = !users.length;
-
   const NavLinks = () => (
     <nav className="nav-links">
       <a href="#home">Home</a>
