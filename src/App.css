@@ -14,9 +14,9 @@
 }
 
 body {
-  background-color:darkolivegreen;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-color:darkslategrey;
+  background-image: linear-gradient(rgba(246, 201, 201, 0.1) 1px, transparent 1px),
+                    linear-gradient(90deg, #f0e9e91a 1px, transparent 1px);
   background-size: 20px 20px; 
 }
 
