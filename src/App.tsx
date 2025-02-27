@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, memo } from 'react'
 import profile_picture from "./assets/profile_picture.jpg"
 import github from "./assets/github.png"
 import linkedln from "./assets/linkedin.png"
@@ -7,6 +7,7 @@ import onboardingai from "./assets/onboardingai.png"
 import astroid from "./assets/astroid.png"
 import route_planning from "./assets/route_planning.png"
 import './App.css'
+
 /*
 General Structure:
 ---> Single Page Structure <------
@@ -41,6 +42,9 @@ Technologies:
   grid highlighting flowing randomly through the side with varying colors. 
 */
 
+// https://docs.google.com/spreadsheets/d/e/2PACX-1vRwHUrNsa96jYumGIoK-eb1PTyZYqCWhF8ygzeWph4NTDk2TqLtHLlquPPe762k4i2fM2o0kMBxUeWE/pubhtml?gid=0&single=true
+
+
 interface Project {
   id: number;
   title: string;
@@ -48,6 +52,15 @@ interface Project {
   image: string;
   skills: string[];
   repoLink: string;
+}
+
+interface BlogPost {
+  id: number;
+  title: string;
+  excerpt: string;
+  date: string;
+  readLink: string;
+  fullContent?: boolean;
 }
 
 const projects: Project[] = [
@@ -77,24 +90,97 @@ const projects: Project[] = [
   },
 ]
 
+const blogPosts: BlogPost[] = [
+  {
+    id: 1,
+    title: "Weekly Dev Log: Full-Stack Journey & Learning Patterns",
+    excerpt: "A week-long deep dive into frontend styling, portfolio development, database integration with Prisma & Docker, and building a full-stack survey application. Reflections on development practices and learning methodologies.",
+    date: "February 8, 2025",
+    readLink: "#",
+    fullContent: false
+  },
+];
+
 const socialLinks = [
   { name: 'GitHub', url: 'https://github.com/AnikSingha/OnboardingAI/tree/main', icon: github },
   { name: 'LinkedIn', url: '___', icon: linkedln },
   { name: 'X', url: 'https://x.com/Sal_KMA', icon: twitter  }
 ]
 
+// Memoize the BlogPost component
+const BlogPost = memo(({ post, isExpanded, onToggleExpand }: { 
+  post: BlogPost; 
+  isExpanded: boolean;
+  onToggleExpand: (id: number) => void;
+}) => {
+  const handleReadMore = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onToggleExpand(post.id);
+  };
+
+  return (
+    <article className="blog-post">
+      <div className="blog-post-content">
+        <time className="blog-date">{post.date}</time>
+        <h3 className="blog-title">{post.title}</h3>
+        <p className="blog-excerpt">{post.excerpt}</p>
+        
+        {isExpanded && (
+          <div className="post-details">
+            <h4>Weekly Progress Overview</h4>
+            <ol className="progress-list">
+              <li>Started with styling practice using CSS, Tailwind, and React for design reconstruction</li>
+              <li>Developed personalized portfolio sites as foundation for future projects</li>
+              <li>Explored database development using Prisma, Docker, and SQL, learning about ORMs and containerization</li>
+              <li>Built an end-to-end survey application integrating all learned concepts</li>
+            </ol>
+
+            <h4>Key Development Insights</h4>
+            <div className="learnings-grid">
+              <div className="learning-card">
+                <h5>Version Control</h5>
+                <p>Commit changes frequently and document modifications. Changes can break applications - having restore points is crucial.</p>
+              </div>
+              <div className="learning-card">
+                <h5>Documentation & Learning</h5>
+                <p>Learn by doing - combine documentation reading with hands-on project development. Use LLMs as supplementary guides for understanding concepts.</p>
+              </div>
+              <div className="learning-card">
+                <h5>Focus Management</h5>
+                <p>Implement task queues to manage feature development. Avoid context switching by documenting ideas without interrupting current work.</p>
+              </div>
+              <div className="learning-card">
+                <h5>Debugging Strategy</h5>
+                <p>Use LLMs as a last resort for debugging. Focus on systematic troubleshooting and understanding the code manually.</p>
+              </div>
+            </div>
+
+            <h4>Looking Forward</h4>
+            <p className="outlook">
+              Preparing for NextJS and serverless frameworks exploration. While documentation reliance is high,
+              focus remains on building fundamental understanding through practical application.
+            </p>
+            <p className="reflection">
+              Sunday's dedicated to breaking down and rebuilding applications for deeper comprehension.
+              Current challenge: Building confidence in library utilization without heavy documentation dependence.
+            </p>
+          </div>
+        )}
+        
+        <a href={post.readLink} className="read-more" onClick={handleReadMore}>
+          {isExpanded ? '← Show Less' : 'Read More →'}
+        </a>
+      </div>
+    </article>
+  );
+});
+
 function App() {
   const [isVisible, setIsVisible] = useState(false)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-
-// About page ->
-/*
-About:
-A slow fade transition to a box with a border that basically explains my about and a contact page at
-the bottom.
-*/
+  const [expandedPosts, setExpandedPosts] = useState<Set<number>>(new Set());
+  
   const NavLinks = () => (
     <nav className="nav-links">
       <a href="#home">Home</a>
@@ -104,7 +190,7 @@ the bottom.
   )
 
   useEffect(() => {
-    const handleMouseMove = (event) => {
+    const handleMouseMove = (event: MouseEvent) => {
       setMousePosition({
         x: event.clientX,
         y: event.clientY,
@@ -189,6 +275,18 @@ the bottom.
     </div>
   )
 
+  const handleTogglePost = (postId: number) => {
+    setExpandedPosts(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(postId)) {
+        newSet.delete(postId);
+      } else {
+        newSet.add(postId);
+      }
+      return newSet;
+    });
+  };
+
   useEffect(() => {
     setIsVisible(true)
   }, [])
@@ -234,11 +332,25 @@ the bottom.
         </div>
 
         {selectedProject && (
-          <ProjectModal 
+          <ProjectModal
             project={selectedProject} 
             onClose={() => setSelectedProject(null)} 
           />
         )}
+
+        <section className="blog-section" id="blog">
+          <h2 className="section-heading">Dev Blog</h2>
+          <div className="blog-posts">
+            {blogPosts.map(post => (
+              <BlogPost 
+                key={post.id} 
+                post={post}
+                isExpanded={expandedPosts.has(post.id)}
+                onToggleExpand={handleTogglePost}
+              />
+            ))}
+          </div>
+        </section>
       </div>
     </>
   )
